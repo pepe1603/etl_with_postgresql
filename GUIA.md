@@ -259,14 +259,39 @@ psql -U mi_usuario -d mi_base
 
 ---
 
-## Soporte
+## Fase 1: Configuración PostgreSQL
 
-Si tienes problemas:
+### Base de datos
+- Nombre: `ejercicio_etl_db`
+- Usuario: `usr_postgres`
 
-1. Verifica que PostgreSQL esta corriendo
-2. Verifica que las rutas de archivos son correctas
-3. Verifica los permisos de archivos
-4. Ejecuta los scripts de instalacion en orden
+### Funciones instaladas
+
+#### validate_date.sql
+- `validate_date()` - Valida fechas con formato, rango, rechaza fechas futuras
+- `is_valid_date()` - Wrapper booleano
+
+#### import_csv.sql
+- `import_csv_to_table()` - Importa CSV con columnas genéricas
+- `import_csv_with_headers()` - Importa CSV con headers personalizados
+- `append_csv_to_table()` - Agrega datos a tabla existente
+
+#### standardize_column.sql
+- `standardize_string_mayus_minus()` - Estandariza/verifica caso de string
+- `is_case_standardized()` - Wrapper booleano
+
+---
+
+### Fase 2: Importar datos CSV
+
+#### Archivos importados
+| Tabla | Filas |
+|-------|-------|
+| productos | 50300 |
+| sucursales | 50300 |
+| clientes | 50300 |
+| detalle_ventas | 50300 |
+| ventas | 50300 |
 
 ---
 
