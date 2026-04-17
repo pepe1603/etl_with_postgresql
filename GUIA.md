@@ -270,5 +270,39 @@ Si tienes problemas:
 
 ---
 
+## Fase 1: Configuración PostgreSQL
+
+### Base de datos
+- Nombre: `ejercicio_etl_db`
+- Usuario: `usr_postgres`
+
+### Funciones instaladas
+
+#### validate_date.sql
+- `validate_date()` - Valida fechas con formato, rango, rechaza fechas futuras
+- `is_valid_date()` - Wrapper booleano
+
+#### import_csv.sql
+- `import_csv_to_table()` - Importa CSV con columnas genéricas
+- `import_csv_with_headers()` - Importa CSV con headers personalizados
+- `append_csv_to_table()` - Agrega datos a tabla existente
+
+#### standardize_column.sql
+- `standardize_string_mayus_minus()` - Estandariza/verifica caso de string
+- `is_case_standardized()` - Wrapper booleano
+
+---
+
+## Fase 2: Importar datos CSV
+
+### Archivos de datos
+- `data/ventas_t.csv` - 15 columnas, 50300 filas
+- `data/productos_t.csv` - 3 columnas
+- `data/sucursales_t.csv` - 3 columnas
+- `data/clientes_t.csv` - 4 columnas
+- `data/detalleventas_t.csv` - 7 columnas
+
+---
+
 **Fecha de creacion:** 2024
 **Autor:** Ejercicio ETL
