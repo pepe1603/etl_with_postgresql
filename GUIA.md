@@ -327,8 +327,36 @@ Si tienes problemas:
 | detalle_ventas | 50099 |
 | ventas | 49899 |
 
-#### Verificación
-- Fechas futuras (2025+): 16732 (no eliminadas)
+### Fase 4: Análisis de datos
+
+#### Métricas generales
+| Métrica | Valor |
+|--------|-------|
+| Total ventas | 49,899 |
+| Total ingresos | $747,821,450 |
+
+#### Por categoría
+| Categoría | Ventas | Total |
+|-----------|-------|-------|
+| Tecnología | 11,531 | $311,464,719 |
+| Electrónica | 6,390 | $236,180,857 |
+| Muebles | 5,408 | $73,252,969 |
+
+#### Por ciudad
+| Ciudad | Ventas | Total |
+|--------|-------|-------|
+| monterrey | 9,917 | $150,719,543 |
+| mérida | 9,949 | $148,560,929 |
+| puebla | 9,963 | $145,458,329 |
+
+#### Por género
+| Género | Ventas | Total |
+|--------|-------|-------|
+| Masculino | 25,257 | $378,012,163 |
+| Femenino | 24,642 | $369,809,287 |
+
+#### Fechas
+- Rango: 2023-01-01 a 2025-12-31
 
 ---
 
