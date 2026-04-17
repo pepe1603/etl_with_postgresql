@@ -270,5 +270,23 @@ Si tienes problemas:
 
 ---
 
+## Versión
+
+**v1.0.0** - Ejercicio ETL completo
+
+## Repositorio Remoto
+
+https://github.com/pepe1603/etl_with_postgresql.git
+
+```bash
+# Clonar
+git clone https://github.com/pepe1603/etl_with_postgresql.git
+
+# Ver versión
+git checkout v1.0.0
+```
+
+---
+
 **Fecha de creacion:** 2024
 **Autor:** Ejercicio ETL
