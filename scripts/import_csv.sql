@@ -192,7 +192,8 @@ BEGIN
     -- Construir las definiciones de las columnas usando los nombres proporcionados (omitir 'id' para evitar conflictos con SERIAL) si existe
     v_col_defs := '';
     v_copy_cols := '';
-    v_insert_cols := '';    FOR v_i IN 1..v_num_cols LOOP
+    v_insert_cols := '';
+    FOR v_i IN 1..v_num_cols LOOP
         -- Skip 'id' column name to avoid conflict with SERIAL
         -- Omitir el nombre de la columna 'id' para evitar conflictos con SERIAL
         IF lower(p_column_names[v_i]) = 'id' THEN
@@ -210,8 +211,11 @@ BEGIN
         v_insert_cols := v_insert_cols || '"' || regexp_replace(p_column_names[v_i], '[^a-zA-Z0-9_]', '_', 'g') || '"';
     END LOOP;
 
-    -- Create staging table with fixed columns
-    EXECUTE 'CREATE TEMP TABLE csv_staging (col1 TEXT, col2 TEXT, col3 TEXT, col4 TEXT, col5 TEXT)';
+    -- Create staging table with dynamic columns
+    EXECUTE 'CREATE TEMP TABLE csv_staging (' || (
+        SELECT string_agg('col' || i || ' TEXT', ', ' ORDER BY i)
+        FROM generate_series(1, v_num_cols) AS i
+    ) || ')';
 
     -- Import CSV (HEADER TRUE skips header row)
     -- Importar el CSV a la tabla de staging (HEADER TRUE skips header row)
