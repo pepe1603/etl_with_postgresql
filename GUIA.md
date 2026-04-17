@@ -285,13 +285,39 @@ psql -U mi_usuario -d mi_base
 ### Fase 2: Importar datos CSV
 
 #### Archivos importados
-| Tabla | Filas |
+| Tabla | Filas Inicial |
 |-------|-------|
 | productos | 50300 |
 | sucursales | 50300 |
 | clientes | 50300 |
 | detalle_ventas | 50300 |
 | ventas | 50300 |
+
+### Fase 3: Limpieza de datos
+
+#### Reglas aplicadas
+1. Fechas futuras: solo verificar (no eliminar)
+2. Nulls/vacíos: ELIMINAR filas
+3. Fechas futuras: solo validar
+
+#### Datos eliminados (nulls/vacíos)
+| Tabla | Eliminadas |
+|-------|-----------|
+| ventas | 401 |
+| clientes | 401 |
+| detalle_ventas | 201 |
+
+#### Filas finales
+| Tabla | Filas |
+|-------|-------|
+| productos | 50300 |
+| sucursales | 50300 |
+| clientes | 49899 |
+| detalle_ventas | 50099 |
+| ventas | 49899 |
+
+#### Verificación
+- Fechas futuras (2025+): 16732 (no eliminadas)
 
 ---
 
