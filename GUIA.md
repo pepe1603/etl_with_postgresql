@@ -1,261 +1,240 @@
-# GUIA ETL - Scripts de Importacion y Limpieza de CSV
+# GUIA ETL - Ejercicio Práctico
 
-## Descripcion
+## Descripción
 
-Este paquete contiene scripts SQL para procesos ETL (Extract, Transform, Load):
-- **Validacion de fechas** - Valida formato y rango de fechas
-- **Limpieza de CSV** - Elimina filas con nulos y fechas invalidas
-- **Importacion de CSV** - Importa archivos CSV a PostgreSQL
+Este paquete contiene scripts SQL para procesos ETL (Extract, Transform, Load) y los datos de prueba para practicar.
+
+---
+
+## Estructura de Archivos
+
+```
+carpeta/
+├── GUIA.md              -- Este archivo
+├── data/
+│   ├── ventas_t.csv       -- 50,300 filas
+│   ├── productos_t.csv   -- 50,300 filas
+│   ├── sucursales_t.csv  -- 50,300 filas
+│   ├── clientes_t.csv    -- 50,300 filas
+│   └── detalleventas_t.csv -- 50,300 filas
+└── scripts/
+    ├── validate_date.sql     -- Funciones de validación de fechas
+    ├── import_csv.sql        -- Funciones de importación CSV
+    └── standardize_column.sql -- Funciones de estandarización
+```
 
 ---
 
 ## Requisitos
 
-### 1. PostgreSQL
 - PostgreSQL 14 o superior instalado
-- Servicio de PostgreSQL ejecutandose
-
-### 2. Base de datos
-- Una base de datos donde crear las funciones
-- Usuario con permisos de creacion de funciones
+- Servicio de PostgreSQL ejecutándose
+- Usuario con permisos de creación de funciones
 
 ---
 
-## Instalacion
+## Instrucciones de Ejecución
 
-### Paso 1: Crear las funciones en tu base de datos
+### Fase 1: Configuración Inicial
 
-Abre tu terminal y ejecuta:
-
-```bash
-# Conecta a tu base de datos
-psql -U TU_USUARIO -d TU_BASE_DE_DATOS
-
-# Ejecuta los scripts en este orden:
-\i scripts/validate_date.sql
-\i scripts/import_csv.sql
-```
-
-O desde terminal del sistema:
+#### 1. Conectar a PostgreSQL
 
 ```bash
-psql -U TU_USUARIO -d TU_BASE_DE_DATOS -f scripts/validate_date.sql
-psql -U TU_USUARIO -d TU_BASE_DE_DATOS -f scripts/import_csv.sql
+# Desde Docker
+docker exec -it postgres17 psql -U usr_postgres -d postgres
+
+# O localmente
+psql -U tu_usuario -d postgres
 ```
 
----
-
-## Como Usar los Scripts
-
-### 1. VALIDAR FECHAS
-
-**Funcion: `validate_date()`**
-
-Valida si una fecha es correcta.
+#### 2. Crear base de datos
 
 ```sql
--- Verificar si una fecha es valida
+CREATE DATABASE ejercicio_etl_db;
+```
+
+#### 3. Instalar funciones ETL
+
+```bash
+# Ejecutar los scripts en orden
+psql -U tu_usuario -d ejercicio_etl_db -f scripts/validate_date.sql
+psql -U tu_usuario -d ejercicio_etl_db -f scripts/import_csv.sql
+psql -U tu_usuario -d ejercicio_etl_db -f scripts/standardize_column.sql
+```
+
+---
+
+### Fase 2: Importar Datos CSV
+
+#### Copiar archivos al contenedor (Docker)
+
+```bash
+docker cp "ruta/data/ventas_t.csv" postgres17:/tmp/ventas_t.csv
+docker cp "ruta/data/productos_t.csv" postgres17:/tmp/productos_t.csv
+docker cp "ruta/data/sucursales_t.csv" postgres17:/tmp/sucursales_t.csv
+docker cp "ruta/data/clientes_t.csv" postgres17:/tmp/clientes_t.csv
+docker cp "ruta/data/detalleventas_t.csv" postgres17:/tmp/detalleventas_t.csv
+```
+
+#### Importar a PostgreSQL
+
+```sql
+-- Conectar a la base de datos
+\c ejercicio_etl_db
+
+-- Importar ventas (15 columnas)
+SELECT * FROM import_csv_with_headers(
+    '/tmp/ventas_t.csv',
+    'ventas',
+    ARRAY['id_venta','producto','categoria','marca','cliente','genero','edad','ciudad_cliente','sucursal','ciudad_sucursal','estado','fecha','cantidad','precio','total']
+);
+
+-- Importar productos (3 columnas)
+SELECT * FROM import_csv_with_headers('/tmp/productos_t.csv', 'productos', ARRAY['producto', 'categoria', 'marca']);
+
+-- Importar sucursales (3 columnas)
+SELECT * FROM import_csv_with_headers('/tmp/sucursales_t.csv', 'sucursales', ARRAY['sucursal', 'ciudad_sucursal', 'estado']);
+
+-- Importar clientes (4 columnas)
+SELECT * FROM import_csv_with_headers('/tmp/clientes_t.csv', 'clientes', ARRAY['cliente', 'genero', 'edad', 'ciudad_cliente']);
+
+-- Importar detalle_ventas (7 columnas)
+SELECT * FROM import_csv_with_headers('/tmp/detalleventas_t.csv', 'detalle_ventas', ARRAY['id_venta', 'producto', 'cliente', 'sucursal', 'fecha', 'cantidad', 'precio']);
+```
+
+---
+
+### Fase 3: Limpieza de Datos
+
+#### Verificar y eliminar nulls/vacíos
+
+```sql
+-- Verificar nulls en cada tabla
+SELECT COUNT(*) FROM ventas WHERE producto IS NULL OR producto = '';
+SELECT COUNT(*) FROM clientes WHERE cliente IS NULL OR cliente = '';
+
+-- Eliminar filas con nulls/vacíos
+DELETE FROM ventas WHERE producto IS NULL OR producto = '';
+DELETE FROM clientes WHERE cliente IS NULL OR cliente = '';
+
+-- Verificar fechas futuras
+SELECT COUNT(*) FROM ventas WHERE fecha > '2024-12-31';
+```
+
+---
+
+### Fase 4: Análisis de Datos
+
+#### Verificar datos importados
+
+```sql
+-- Contar filas por tabla
+SELECT 'ventas' as tabla, COUNT(*) FROM ventas
+UNION ALL SELECT 'productos', COUNT(*) FROM productos
+UNION ALL SELECT 'sucursales', COUNT(*) FROM sucursales
+UNION ALL SELECT 'clientes', COUNT(*) FROM clientes
+UNION ALL SELECT 'detalle_ventas', COUNT(*) FROM detalle_ventas;
+```
+
+#### Análisis de ventas
+
+```sql
+-- Ventas por categoría
+SELECT categoria, COUNT(*) as ventas, SUM(total::INT) as total
+FROM ventas GROUP BY categoria ORDER BY total DESC;
+
+-- Top 10 productos
+SELECT producto, COUNT(*) as veces, SUM(total::INT) as total
+FROM ventas GROUP BY producto ORDER BY total DESC LIMIT 10;
+
+-- Por ciudad
+SELECT ciudad_sucursal, COUNT(*) as ventas, SUM(total::INT) as total
+FROM ventas GROUP BY ciudad_sucursal ORDER BY total DESC;
+
+-- Por género
+SELECT genero, COUNT(*) as ventas, SUM(total::INT) as total
+FROM ventas GROUP BY genero;
+
+-- Estandarizar ciudades (a minúsculas)
+UPDATE ventas SET ciudad_sucursal = LOWER(ciudad_sucursal);
+UPDATE ventas SET ciudad_cliente = LOWER(ciudad_cliente);
+UPDATE ventas SET estado = LOWER(estado);
+```
+
+---
+
+## Funciones Disponibles
+
+### validate_date.sql
+
+```sql
+-- Validar fecha
 SELECT * FROM validate_date('2024-01-15');
 
--- Con rango de fechas
+-- Validar con rango
 SELECT * FROM validate_date('2024-06-15', 'YYYY-MM-DD', '2024-01-01', '2024-12-31');
 
 -- Rechazar fechas futuras
 SELECT * FROM validate_date('2030-01-01', NULL, NULL, NULL, TRUE);
 
--- Simple booleano
+-- Wrapper booleano
 SELECT is_valid_date('2024-01-15');
 ```
 
-**Parametros:**
-- `p_date` - La fecha a validar (texto)
-- `p_format` - Formato esperado (default: YYYY-MM-DD)
-- `p_min_date` - Fecha minima (opcional)
-- `p_max_date` - Fecha maxima (opcional)
-- `p_reject_future` - Rechazar fechas futuras (TRUE/FALSE)
-
-**Retorna:**
-- `is_valid` - TRUE/FALSE
-- `status` - Estado (valid, invalid_format, below_minimum, exceeds_maximum, etc.)
-- `parsed_date` - Fecha parseada
-- `message` - Mensaje descriptivo
-
----
-
-### 2. IMPORTAR CSV A POSTGRESQL
-
-**Funcion: `import_csv_to_table()`**
-
-Importa un archivo CSV creando tabla con columnas genericas.
+### import_csv.sql
 
 ```sql
-SELECT * FROM import_csv_to_table(
-    '/ruta/completa/archivo.csv',  -- Ruta del archivo
-    'nombre_tabla',                -- Nombre de la tabla
-    5                              -- Numero de columnas
-);
-```
-
-**Funcion: `import_csv_with_headers()`**
-
-Importa CSV con nombres de columnas personalizados.
-
-```sql
+-- Importar con headers
 SELECT * FROM import_csv_with_headers(
-    '/ruta/completa/archivo.csv',
-    'empleados',
-    ARRAY['id', 'nombre', 'fecha_inicio', 'fecha_fin', 'estado']
+    '/ruta/archivo.csv',
+    'nombre_tabla',
+    ARRAY['col1', 'col2', 'col3']
 );
+
+-- Append a tabla existente
+SELECT * FROM append_csv_to_table('/ruta/archivo.csv', 'tabla_existente');
 ```
 
-**Funcion: `append_csv_to_table()`**
-
-Agrega datos a una tabla existente.
+### standardize_column.sql
 
 ```sql
-SELECT * FROM append_csv_to_table(
-    '/ruta/completa/archivo.csv',
-    'tabla_existente'
-);
+-- Verificar si string está en minúsculas
+SELECT * FROM standardize_string_mayus_minus('Mérida', 'lower', FALSE);
+
+-- Convertir a minúsculas
+SELECT * FROM standardize_string_mayus_minus('MÉRIDA', 'lower', TRUE);
+
+-- Wrapper booleano
+SELECT is_case_standardized('mérida', 'lower');
 ```
 
 ---
 
-### 3. LIMPIAR CSV (Script Interactivo)
+## Resultados Esperados
 
-El script `clean_csv.sql` limpia un archivo CSV eliminando:
-- Filas con valores nulos
-- Filas con fechas invalidas
-
-**Uso:**
-
-```bash
-psql -U TU_USUARIO -d TU_BASE_DE_DATOS -v file='/ruta/archivo.csv' -f scripts/clean_csv.sql
-```
-
-**Ejemplo:**
-
-```bash
-psql -U pepe_gope -d postgres -v file='/Users/pepe/Desktop/datos.csv' -f scripts/clean_csv.sql
-```
-
-**El script:**
-1. Lee el archivo CSV
-2. Crea tabla temporal
-3. Analiza y cuenta filas con problemas
-4. Exporta archivo limpio (sobreescribe el original)
-5. Muestra reporte de limpieza
-
----
-
-## Ejemplo Completo de Uso
-
-### 1. Preparar archivo de prueba
-
-Crea un archivo `datos.csv`:
-
-```csv
-id,nombre,fecha_inicio,fecha_fin,estado
-1,Juan,2024-01-15,2024-06-30,activo
-2,Maria,invalid-date,2024-07-15,activo
-3,Pedro,2024-02-20,,pendiente
-4,Ana,2024-03-10,2024-08-31,activo
-5,Luis,,2024-09-30,activo
-```
-
-### 2. Importar a PostgreSQL
-
-```sql
-SELECT * FROM import_csv_with_headers(
-    '/Users/tu_usuario/Desktop/datos.csv',
-    'empleados',
-    ARRAY['id', 'nombre', 'fecha_inicio', 'fecha_fin', 'estado']
-);
-```
-
-### 3. Verificar los datos
-
-```sql
-SELECT * FROM empleados;
-```
-
-### 4. Limpiar datos invalidos
-
-```bash
-psql -U tu_usuario -d postgres -v file='/Users/tu_usuario/Desktop/datos.csv' -f scripts/clean_csv.sql
-```
+| Tabla | Filas Inicial | Filas Final |
+|-------|--------------|------------|
+| ventas | 50,300 | 49,899 |
+| productos | 50,300 | 50,300 |
+| sucursales | 50,300 | 50,300 |
+| clientes | 50,300 | 49,899 |
+| detalle_ventas | 50,300 | 50,099 |
 
 ---
 
 ## Errores Comunes
 
 ### "permission denied"
-Solucion: Verificar permisos del archivo y carpeta
+Solución: Verificar permisos del archivo y carpeta
 
 ### "could not open file"
-Solucion: Verificar que la ruta es correcta
+Solución: Verificar que la ruta es correcta
 
 ### "does not exist"
-Solucion: Verificar que PostgreSQL esta corriendo
+Solución: Verificar que PostgreSQL está corriendo
 
 ### "function does not exist"
-Solucion: Ejecutar los scripts de instalacion nuevamente
-
----
-
-## Archivos Incluidos
-
-```
-etl_scripts/
-├── GUIA_PARA_AMIGO.md    -- Este archivo
-└── scripts/
-    ├── validate_date.sql  -- Funciones de validacion
-    ├── import_csv.sql     -- Funciones de importacion
-    └── clean_csv.sql      -- Script de limpieza
-```
-
----
-
-## Configuracion de PostgreSQL
-
-### Iniciar PostgreSQL (Mac con Homebrew)
-
-```bash
-brew services start postgresql@14
-```
-
-### Conectar a PostgreSQL
-
-```bash
-psql -U TU_USUARIO -d TU_BASE_DE_DATOS
-```
-
-### Ver bases de datos disponibles
-
-```sql
-\l
-```
-
-### Ver tablas
-
-```sql
-\dt
-```
-
----
-
-## Credenciales
-
-Configura tu conexion editando los comandos segun tu configuracion:
-
-```bash
-# Formato
-psql -U USUARIO -d BASE_DE_DATOS
-
-# Ejemplo
-psql -U postgres -d postgres
-psql -U mi_usuario -d mi_base
-```
+Solución: Ejecutar los scripts de instalación nuevamente
 
 ---
 
@@ -263,102 +242,12 @@ psql -U mi_usuario -d mi_base
 
 Si tienes problemas:
 
-1. Verifica que PostgreSQL esta corriendo
+1. Verifica que PostgreSQL está corriendo
 2. Verifica que las rutas de archivos son correctas
 3. Verifica los permisos de archivos
-4. Ejecuta los scripts de instalacion en orden
+4. Ejecuta los scripts de instalación en orden
 
 ---
 
-## Fase 1: Configuración PostgreSQL
-
-### Base de datos
-- Nombre: `ejercicio_etl_db`
-- Usuario: `usr_postgres`
-
-### Funciones instaladas
-
-#### validate_date.sql
-- `validate_date()` - Valida fechas con formato, rango, rechaza fechas futuras
-- `is_valid_date()` - Wrapper booleano
-
-#### import_csv.sql
-- `import_csv_to_table()` - Importa CSV con columnas genéricas
-- `import_csv_with_headers()` - Importa CSV con headers personalizados
-- `append_csv_to_table()` - Agrega datos a tabla existente
-
-#### standardize_column.sql
-- `standardize_string_mayus_minus()` - Estandariza/verifica caso de string
-- `is_case_standardized()` - Wrapper booleano
-
----
-
-### Fase 2: Importar datos CSV
-
-#### Archivos importados
-| Tabla | Filas Inicial |
-|-------|-------|
-| productos | 50300 |
-| sucursales | 50300 |
-| clientes | 50300 |
-| detalle_ventas | 50300 |
-| ventas | 50300 |
-
-### Fase 3: Limpieza de datos
-
-#### Reglas aplicadas
-1. Fechas futuras: solo verificar (no eliminar)
-2. Nulls/vacíos: ELIMINAR filas
-3. Fechas futuras: solo validar
-
-#### Datos eliminados (nulls/vacíos)
-| Tabla | Eliminadas |
-|-------|-----------|
-| ventas | 401 |
-| clientes | 401 |
-| detalle_ventas | 201 |
-
-#### Filas finales
-| Tabla | Filas |
-|-------|-------|
-| productos | 50300 |
-| sucursales | 50300 |
-| clientes | 49899 |
-| detalle_ventas | 50099 |
-| ventas | 49899 |
-
-### Fase 4: Análisis de datos
-
-#### Métricas generales
-| Métrica | Valor |
-|--------|-------|
-| Total ventas | 49,899 |
-| Total ingresos | $747,821,450 |
-
-#### Por categoría
-| Categoría | Ventas | Total |
-|-----------|-------|-------|
-| Tecnología | 11,531 | $311,464,719 |
-| Electrónica | 6,390 | $236,180,857 |
-| Muebles | 5,408 | $73,252,969 |
-
-#### Por ciudad
-| Ciudad | Ventas | Total |
-|--------|-------|-------|
-| monterrey | 9,917 | $150,719,543 |
-| mérida | 9,949 | $148,560,929 |
-| puebla | 9,963 | $145,458,329 |
-
-#### Por género
-| Género | Ventas | Total |
-|--------|-------|-------|
-| Masculino | 25,257 | $378,012,163 |
-| Femenino | 24,642 | $369,809,287 |
-
-#### Fechas
-- Rango: 2023-01-01 a 2025-12-31
-
----
-
-**Fecha de creacion:** 2024
 **Autor:** Ejercicio ETL
+**Fecha:** 2026
