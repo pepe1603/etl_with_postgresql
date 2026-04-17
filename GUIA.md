@@ -293,14 +293,16 @@ Si tienes problemas:
 
 ---
 
-## Fase 2: Importar datos CSV
+### Fase 2: Importar datos CSV
 
-### Archivos de datos
-- `data/ventas_t.csv` - 15 columnas, 50300 filas
-- `data/productos_t.csv` - 3 columnas
-- `data/sucursales_t.csv` - 3 columnas
-- `data/clientes_t.csv` - 4 columnas
-- `data/detalleventas_t.csv` - 7 columnas
+#### Archivos importados
+| Tabla | Filas |
+|-------|-------|
+| productos | 50300 |
+| sucursales | 50300 |
+| clientes | 50300 |
+| detalle_ventas | 50300 |
+| ventas | 50300 |
 
 ---
 
