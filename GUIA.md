@@ -206,12 +206,20 @@ Solucion: Ejecutar los scripts de instalacion nuevamente
 ## Archivos Incluidos
 
 ```
-etl_scripts/
-├── GUIA_PARA_AMIGO.md    -- Este archivo
+carpeta/
+├── GUIA.md              -- Este archivo
+├── data/
+│   ├── ventas_t.csv       -- Datos de ventas
+│   ├── productos_t.csv   -- Datos de productos
+│   ├── sucursales_t.csv  -- Datos de sucursales
+│   ├── clientes_t.csv    -- Datos de clientes
+│   └── detalleventas_t.csv -- Datos de detalle ventas
 └── scripts/
-    ├── validate_date.sql  -- Funciones de validacion
-    ├── import_csv.sql     -- Funciones de importacion
-    └── clean_csv.sql      -- Script de limpieza
+    ├── validate_date.sql     -- Validar fechas
+    ├── import_csv.sql        -- Importar CSV
+    ├── standardize_column.sql -- Estandarizar texto
+    ├── validate_negative.sql  -- Validar valores negativos
+    └── export_csv.sql         -- Exportar datos
 ```
 
 ---
@@ -280,6 +288,13 @@ psql -U mi_usuario -d mi_base
 - `standardize_string_mayus_minus()` - Estandariza/verifica caso de string
 - `is_case_standardized()` - Wrapper booleano
 
+#### validate_negative.sql
+- `validate_negative(tabla, columna)` - Valida y elimina valores negativos
+- `has_negative(tabla, columna)` - Wrapper booleano
+
+#### export_csv.sql
+- Funciones auxiliares para exportar datos
+
 ---
 
 ### Fase 2: Importar datos CSV
@@ -307,7 +322,7 @@ psql -U mi_usuario -d mi_base
 | clientes | 401 |
 | detalle_ventas | 201 |
 
-#### Filas finales
+#### Filas finales (después de nulls)
 | Tabla | Filas |
 |-------|-------|
 | productos | 50300 |
@@ -316,8 +331,65 @@ psql -U mi_usuario -d mi_base
 | detalle_ventas | 50099 |
 | ventas | 49899 |
 
+#### Filas finales (después de valores negativos)
+| Tabla | Filas |
+|-------|-------|
+| ventas | 49751 |
+
 #### Verificación
 - Fechas futuras (2025+): 16732 (no eliminadas)
+
+### Fase 4: Validar valores negativos
+
+#### 安装 scripts adicionales
+```bash
+psql -U tu_usuario -d ejercicio_etl_db -f scripts/validate_negative.sql
+psql -U tu_usuario -d ejercicio_etl_db -f scripts/export_csv.sql
+```
+
+#### validar valores negativos
+```sql
+-- Verificar si hay valores negativos en una columna
+SELECT * FROM has_negative('ventas', 'cantidad');
+-- Retorna: TRUE o FALSE
+
+-- Verificar y eliminar valores negativos
+SELECT * FROM validate_negative('ventas', 'precio');
+-- Elimina las filas con valores negativos en la columna
+
+-- Verificar todas las columnas numéricas
+SELECT * FROM check_all_negative('ventas');
+```
+
+#### Resultados ejemplo
+| Columna | Negativos encontrados | Eliminados |
+|---------|-------------------|-----------|
+| cantidad | 0 | 0 |
+| precio | 148 | 148 |
+| total | 0 | 0 |
+
+### Fase 5: Exportar datos a CSV
+
+#### Usar \copy desde psql
+```bash
+# Exportar tabla completa
+\copy (SELECT * FROM ventas) TO '/ruta/ventas.csv' WITH (FORMAT CSV, HEADER)
+
+# Exportar con filtro
+\copy (SELECT * FROM ventas WHERE fecha <= '2024-12-31') TO '/ruta/ventas_2024.csv' WITH (FORMAT CSV, HEADER)
+```
+
+#### Funciones auxiliares
+```sql
+-- Listar tablas
+SELECT * FROM list_tables();
+
+-- Contar filas
+SELECT count_rows('ventas');
+
+-- Ver estructura de tabla
+SELECT * FROM table_info('ventas');
+```
 
 ---
 

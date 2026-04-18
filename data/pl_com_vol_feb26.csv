@@ -1,0 +1,132 @@
+anio,mes,entidad_federativa,municipio,producto,volumen_vendido_b
+2026,2,Aguascalientes,Aguascalientes,Turbosina,5532.64
+2026,2,Baja California,Mexicali,Turbosina,2620.61
+2026,2,Baja California,Tijuana,Turbosina,63914.37
+2026,2,Baja California Sur,Mulegé,Turbosina,3.16
+2026,2,Baja California Sur,La Paz,Turbosina,5906.1
+2026,2,Baja California Sur,La Paz,Combustóleo,61126.9
+2026,2,Baja California Sur,Los Cabos,Turbosina,101329.93
+2026,2,Baja California Sur,Loreto,Turbosina,2211.67
+2026,2,Campeche,Campeche,Combustóleo,27984.44
+2026,2,Campeche,Calakmul,Combustóleo,4372.02
+2026,2,Campeche,Campeche,Turbosina,481.22
+2026,2,Campeche,Carmen,Turbosina,1876.04
+2026,2,Chiapas,Tapachula,Turbosina,1990.8
+2026,2,Chiapas,Chiapa de Corzo,Turbosina,2020.28
+2026,2,Chiapas,Tuxtla Gutiérrez,Turbosina,892.62
+2026,2,Chihuahua,Chihuahua,Combustóleo,4111.25
+2026,2,Chihuahua,Delicias,Combustóleo,6694.87
+2026,2,Chihuahua,Juárez,Turbosina,7561.04
+2026,2,Chihuahua,Chihuahua,Turbosina,9136.59
+2026,2,Ciudad de México,Álvaro Obregón,Turbosina,8.68
+2026,2,Ciudad de México,Benito Juárez,Turbosina,43282.48
+2026,2,Ciudad de México,Azcapotzalco,Combustóleo,1318.81
+2026,2,Ciudad de México,Cuauhtémoc,Combustóleo,160.37
+2026,2,Ciudad de México,Venustiano Carranza,Turbosina,568988.62
+2026,2,Ciudad de México,Cuajimalpa de Morelos,Turbosina,30.11
+2026,2,Ciudad de México,Miguel Hidalgo,Combustóleo,1541.92
+2026,2,Coahuila,Monclova,Turbosina,4.41
+2026,2,Coahuila,Saltillo,Turbosina,814.54
+2026,2,Coahuila,Torreón,Turbosina,2499.69
+2026,2,Colima,Cuauhtémoc,Turbosina,1240.15
+2026,2,Colima,Manzanillo,Turbosina,2181.61
+2026,2,Durango,Lerdo,Combustóleo,24455.6
+2026,2,Durango,Durango,Turbosina,3265.08
+2026,2,Guanajuato,Celaya,Combustóleo,3403.32
+2026,2,Guanajuato,León,Turbosina,24.92
+2026,2,Guanajuato,Salamanca,Combustóleo,1670.65
+2026,2,Guanajuato,Guanajuato,Turbosina,7558.31
+2026,2,Guanajuato,Silao de la Victoria,Turbosina,2410.26
+2026,2,Guerrero,Cochoapa el Grande,Turbosina,1569.61
+2026,2,Guerrero,Zihuatanejo de Azueta,Turbosina,5180.88
+2026,2,Guerrero,La Unión de Isidoro Montes de Oca,Combustóleo,173811.75
+2026,2,Guerrero,Acapulco de Juárez,Turbosina,3221.25
+2026,2,Hidalgo,Tizayuca,Combustóleo,987.87
+2026,2,Hidalgo,Tula de Allende,Combustóleo,220679.71
+2026,2,Hidalgo,Tulancingo de Bravo,Combustóleo,925.5
+2026,2,Hidalgo,Pachuca de Soto,Turbosina,346.3
+2026,2,Hidalgo,Santiago Tulantepec de Lugo Guerrero,Combustóleo,234.59
+2026,2,Jalisco,Lagos de Moreno,Combustóleo,490.07
+2026,2,Jalisco,Puerto Vallarta,Turbosina,104093.64
+2026,2,Jalisco,Tlajomulco de Zúñiga,Turbosina,84908.36
+2026,2,Jalisco,San Pedro Tlaquepaque,Turbosina,15.13
+2026,2,Jalisco,Zapopan,Turbosina,1619.02
+2026,2,Jalisco,Zapotiltic,Turbosina,1.89
+2026,2,Jalisco,Guadalajara,Turbosina,24869.25
+2026,2,Jalisco,Guadalajara,Combustóleo,1093.58
+2026,2,México,Almoloya de Juárez,Combustóleo,4491.81
+2026,2,México,Toluca,Turbosina,34830.15
+2026,2,México,Zumpango,Turbosina,139141.86
+2026,2,México,Ecatepec de Morelos,Turbosina,5.03
+2026,2,México,Cuautitlán Izcalli,Combustóleo,2019.26
+2026,2,México,Metepec,Turbosina,10.89
+2026,2,México,Tlalnepantla de Baz,Turbosina,1.26
+2026,2,Michoacán,Álvaro Obregón,Turbosina,1149.2
+2026,2,Michoacán,Morelia,Turbosina,6312.71
+2026,2,Michoacán,Uruapan,Turbosina,824.07
+2026,2,Michoacán,Lázaro Cárdenas,Combustóleo,8422.39
+2026,2,Morelos,Cuernavaca,Turbosina,430.72
+2026,2,Morelos,Temixco,Turbosina,11.3
+2026,2,Nayarit,Tepic,Turbosina,362.61
+2026,2,Nayarit,Xalisco,Turbosina,1472.15
+2026,2,Nuevo León,Allende,Combustóleo,1404.95
+2026,2,Nuevo León,San Pedro Garza García,Turbosina,2.52
+2026,2,Nuevo León,Monterrey,Turbosina,39333.85
+2026,2,Nuevo León,García,Turbosina,400.0
+2026,2,Nuevo León,Apodaca,Turbosina,90541.19
+2026,2,Nuevo León,Cadereyta Jiménez,Combustóleo,2413.84
+2026,2,Oaxaca,Santa María Huatulco,Turbosina,2899.57
+2026,2,Oaxaca,San Pedro Mixtepec,Turbosina,1748.96
+2026,2,Oaxaca,Ciudad Ixtepec,Turbosina,287.77
+2026,2,Oaxaca,Oaxaca de Juárez,Turbosina,9413.61
+2026,2,Oaxaca,Santa Cruz Xoxocotlán,Turbosina,3478.24
+2026,2,Puebla,Huejotzingo,Combustóleo,151.61
+2026,2,Puebla,Nopalucan,Combustóleo,160.37
+2026,2,Puebla,Huejotzingo,Turbosina,5184.58
+2026,2,Puebla,Tehuacán,Turbosina,8.77
+2026,2,Puebla,Puebla,Combustóleo,839.12
+2026,2,Querétaro,Colón,Turbosina,26584.31
+2026,2,Querétaro,Querétaro,Combustóleo,954393.0
+2026,2,Querétaro,Querétaro,Turbosina,1688.33
+2026,2,Quintana Roo,Cozumel,Turbosina,3281.89
+2026,2,Quintana Roo,Tulum,Turbosina,5739.07
+2026,2,Quintana Roo,Othón P. Blanco,Turbosina,202.89
+2026,2,Quintana Roo,Benito Juárez,Turbosina,517473.07
+2026,2,Quintana Roo,Solidaridad,Turbosina,418.84
+2026,2,Quintana Roo,Felipe Carrillo Puerto,Turbosina,4697.91
+2026,2,San Luis Potosí,Tamuín,Turbosina,4.4
+2026,2,San Luis Potosí,San Luis Potosí,Turbosina,4660.65
+2026,2,Sinaloa,Ahome,Combustóleo,1770.96
+2026,2,Sinaloa,Mazatlán,Turbosina,11452.28
+2026,2,Sinaloa,Salvador Alvarado,Turbosina,5.66
+2026,2,Sinaloa,Ahome,Turbosina,1960.36
+2026,2,Sinaloa,Culiacán,Turbosina,6054.35
+2026,2,Sinaloa,Mazatlán,Combustóleo,58700.41
+2026,2,Sonora,Cajeme,Combustóleo,298.64
+2026,2,Sonora,Guaymas,Turbosina,48.67
+2026,2,Sonora,Cajeme,Turbosina,1376.84
+2026,2,Sonora,Hermosillo,Turbosina,4209.9
+2026,2,Sonora,Navojoa,Combustóleo,656.23
+2026,2,Sonora,Navojoa,Turbosina,157.22
+2026,2,Sonora,Puerto Peñasco,Turbosina,22.18
+2026,2,Tabasco,Centro,Turbosina,2367.14
+2026,2,Tabasco,Jalpa de Méndez,Turbosina,233.84
+2026,2,Tamaulipas,Matamoros,Turbosina,90.27
+2026,2,Tamaulipas,Nuevo Laredo,Turbosina,29.77
+2026,2,Tamaulipas,Reynosa,Turbosina,801.27
+2026,2,Tamaulipas,Tampico,Turbosina,2736.45
+2026,2,Tlaxcala,Huamantla,Combustóleo,154.71
+2026,2,Veracruz,Xalapa,Turbosina,5.41
+2026,2,Veracruz,Tuxpan,Combustóleo,202111.11
+2026,2,Veracruz,Boca del Río,Turbosina,10.62
+2026,2,Veracruz,Minatitlán,Turbosina,26.35
+2026,2,Veracruz,Tihuatlán,Turbosina,6.83
+2026,2,Veracruz,Veracruz,Turbosina,14288.53
+2026,2,Veracruz,Cosoleacaque,Turbosina,207.4
+2026,2,Veracruz,Perote,Combustóleo,42.58
+2026,2,Yucatán,Mérida,Turbosina,27434.69
+2026,2,Yucatán,Mérida,Combustóleo,43792.72
+2026,2,Yucatán,Umán,Combustóleo,640.08
+2026,2,Yucatán,Valladolid,Combustóleo,76231.7
+2026,2,Zacatecas,Fresnillo,Turbosina,57.92
+2026,2,Zacatecas,Zacatecas,Turbosina,1291.29
